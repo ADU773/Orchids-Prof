@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef, useState } from "react";
-import { GothicCards } from "./GothicCards";
+import { SplineBackground } from "./SplineBackground";
 import { Magnetic } from "./ui/magnetic";
 
 export function HeroSection() {
@@ -29,15 +29,15 @@ export function HeroSection() {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* 3D Scene Layer (Behind the text) */}
-      <motion.div 
-        className="absolute inset-0 z-0"
-        style={{ 
-          scale: sceneScale, 
-          opacity: sceneOpacity
-        }}
-      >
-        <GothicCards />
-      </motion.div>
+        <motion.div 
+          className="absolute inset-0 z-0"
+          style={{ 
+            scale: sceneScale, 
+            opacity: sceneOpacity
+          }}
+        >
+          <SplineBackground />
+        </motion.div>
 
       {/* Typography Mask Layer (The focal point) */}
       <motion.div 

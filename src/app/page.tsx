@@ -8,12 +8,9 @@ import { HeroSection } from "@/components/HeroSection";
 import { AboutSection } from "@/components/AboutSection";
 import { FeaturesSection } from "@/components/FeaturesSection";
 import { ShowcaseSection } from "@/components/ShowcaseSection";
-import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { AnimatePresence, motion } from "framer-motion";
-
-import { Interactive3D } from "@/components/Interactive3D";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -44,7 +41,6 @@ export default function Home() {
                 <ShowcaseSection />
               </section>
               <div className="bg-transparent">
-                <CTASection />
                 <Footer />
               </div>
             </main>
