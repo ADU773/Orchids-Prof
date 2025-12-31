@@ -12,8 +12,8 @@ export function Footer() {
               className="text-2xl font-bold tracking-tight"
               whileHover={{ scale: 1.05 }}
             >
-              <span className="bg-gradient-to-r from-[#00f3ff] to-[#bc13fe] bg-clip-text text-transparent">
-                ADVAITH
+              <span className="text-white">
+                OVERLAY
               </span>
             </motion.a>
 
@@ -34,7 +34,7 @@ export function Footer() {
 
           <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-white/30">
-              2024 ADVAITH. All rights reserved.
+              2024 OVERLAY. All rights reserved.
             </p>
 
           <div className="flex items-center gap-6">

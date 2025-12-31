@@ -39,41 +39,19 @@ export function HeroSection() {
         <GothicCards />
       </motion.div>
 
-      {/* Typography Mask Layer (The focal point) */}
+      {/* Typography Overlay Layer */}
       <motion.div 
-        className="absolute inset-0 z-10 pointer-events-none"
+        className="absolute inset-0 z-10 pointer-events-none flex items-center px-8 md:px-24"
         style={{ scale: textScale, opacity: textOpacity }}
       >
-        <div className="relative w-full h-full flex items-center px-8 md:px-24">
-          <svg className="w-full h-full absolute inset-0" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <mask id="heroTextMask">
-                {/* Everything white is visible, everything black is hidden */}
-                <rect width="100%" height="100%" fill="white" />
-                <text
-                  x="5%"
-                  y="50%"
-                  textAnchor="start"
-                  dominantBaseline="middle"
-                  className="font-black tracking-[-0.08em] uppercase select-none"
-                  style={{ fontSize: "18vw", fill: "black" }}
-                >
-                  ADVAITH
-                </text>
-              </mask>
-            </defs>
-            {/* This black rect covers the whole screen except where the text is (the mask) */}
-            <rect
-              width="100%"
-              height="100%"
-              fill="black"
-              mask="url(#heroTextMask)"
-            />
-          </svg>
-          
-          {/* Subtle Grain over the mask */}
-          <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-        </div>
+        <h1 
+          className="w-full text-[18vw] font-black tracking-[-0.08em] uppercase select-none text-white mix-blend-difference"
+        >
+          OVERLAY
+        </h1>
+        
+        {/* Subtle Grain over the text */}
+        <div className="absolute inset-0 pointer-events-none opacity-10 mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
       </motion.div>
 
       {/* Red Accents & Atmospheric Lighting */}

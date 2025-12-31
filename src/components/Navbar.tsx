@@ -19,12 +19,12 @@ export function Navbar() {
     >
           <div className="max-w-7xl mx-auto flex items-center justify-between">
               <Magnetic amount={0.2}>
-                <motion.a 
-                  href="/" 
-                  className="text-lg font-bold tracking-tighter"
-                >
-                  ADVAITH
-                </motion.a>
+                  <motion.a 
+                    href="/" 
+                    className="text-lg font-bold tracking-tighter"
+                  >
+                    OVERLAY
+                  </motion.a>
               </Magnetic>
 
 
