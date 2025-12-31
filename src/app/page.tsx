@@ -13,6 +13,8 @@ import { Footer } from "@/components/Footer";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { AnimatePresence, motion } from "framer-motion";
 
+import { Interactive3D } from "@/components/Interactive3D";
+
 export default function Home() {
   const [loading, setLoading] = useState(true);
 
@@ -29,19 +31,22 @@ export default function Home() {
           >
             <CustomCursor />
             <Navbar />
-            <main className="bg-[#050505]">
+            
+            <main className="relative z-10 bg-black">
               <HeroSection />
-              <section id="about">
+              <section id="about" className="bg-transparent">
                 <AboutSection />
               </section>
-              <section id="features">
+              <section id="features" className="bg-transparent">
                 <FeaturesSection />
               </section>
-              <section id="work">
+              <section id="work" className="bg-transparent">
                 <ShowcaseSection />
               </section>
-              <CTASection />
-              <Footer />
+              <div className="bg-transparent">
+                <CTASection />
+                <Footer />
+              </div>
             </main>
           </motion.div>
         )}

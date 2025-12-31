@@ -14,7 +14,7 @@ export function AboutSection() {
     const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
     return (
-      <section ref={containerRef} className="relative py-64 px-6 bg-background overflow-hidden">
+      <section ref={containerRef} className="relative py-64 px-6 bg-transparent overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
             <motion.div

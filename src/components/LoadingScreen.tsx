@@ -41,9 +41,10 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
               animate={{ opacity: 1, y: 0 }}
               className="mb-12 overflow-hidden"
             >
-              <h2 className="text-4xl font-bold tracking-[0.5em] text-white">
-                NEXUS
-              </h2>
+                <h2 className="text-4xl font-bold tracking-[0.5em] text-white">
+                  ADVAITH
+                </h2>
+
               <motion.div 
                 className="h-[1px] bg-gradient-to-r from-transparent via-[#00f3ff] to-transparent w-full mt-4"
                 initial={{ scaleX: 0 }}

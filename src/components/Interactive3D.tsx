@@ -1,181 +1,149 @@
 "use client";
 
-import React, { useRef, useState, Suspense, useMemo } from "react";
+import React, { useRef, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { 
-  MeshDistortMaterial, 
-  Sphere, 
-  Environment, 
-  Float,
-  ContactShadows,
-  PerspectiveCamera,
-  Icosahedron
-} from "@react-three/drei";
+import { Float, MeshTransmissionMaterial, ContactShadows, Environment, PerspectiveCamera, Text, RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
 
-// Fix for environment-injected props (like data-orchids-name) that clash with R3F's prop application
-// R3F interprets dashes as path separators (e.g., data-orchids-name -> data.orchids.name)
-if (typeof window !== "undefined") {
-  const proto = THREE.Object3D.prototype as any;
-  if (!proto.data) {
-    Object.defineProperty(proto, "data", {
-      get() {
-        if (!this._data) this._data = { orchids: {} };
-        return this._data;
-      },
-      set(v) {
-        this._data = v;
-      },
-      configurable: true,
-    });
-  }
-}
+const projectNames = [
+  "Smart Parking System",
+  "FromFlow",
+  "Activity Point Tracker",
+  "Malayalam FML font converter",
+  "ADVAITH",
+];
 
-function Shards({ count = 20 }) {
-  const shards = useMemo(() => {
-    const temp = [];
-    for (let i = 0; i < count; i++) {
-      temp.push({
-        position: [
-          (Math.random() - 0.5) * 10,
-          (Math.random() - 0.5) * 10,
-          (Math.random() - 0.5) * 5,
-        ],
-        rotation: [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI],
-        scale: Math.random() * 0.2 + 0.1,
-        speed: Math.random() * 0.5 + 0.2,
-      });
-    }
-    return temp;
-  }, [count]);
-
-  return (
-    <group>
-      {shards.map((shard, i) => (
-        <Shard key={i} {...shard} />
-      ))}
-    </group>
-  );
-}
-
-function Shard({ position, rotation, scale, speed }: any) {
-  const ref = useRef<THREE.Mesh>(null);
+function Card({ 
+  position, 
+  rotation, 
+  index, 
+  title 
+}: { 
+  position: [number, number, number], 
+  rotation: [number, number, number], 
+  index: number,
+  title: string
+}) {
+  const mesh = useRef<THREE.Mesh>(null);
+  const group = useRef<THREE.Group>(null);
+  const { mouse } = useThree();
   
   useFrame((state) => {
-    if (!ref.current) return;
-    const time = state.clock.getElapsedTime();
-    ref.current.rotation.x += 0.01 * speed;
-    ref.current.rotation.y += 0.01 * speed;
-    ref.current.position.y += Math.sin(time * speed) * 0.002;
+    if (!group.current) return;
+    
+    // Smooth mouse parallax
+    const targetX = (mouse.x * 2);
+    const targetY = (mouse.y * 2);
+    
+    group.current.position.x = THREE.MathUtils.lerp(group.current.position.x, position[0] + targetX * (0.5 + index * 0.1), 0.05);
+    group.current.position.y = THREE.MathUtils.lerp(group.current.position.y, position[1] + targetY * (0.5 + index * 0.1), 0.05);
+    
+    // Subtle tilt
+    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, rotation[0] + (mouse.y * 0.2), 0.05);
+    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, rotation[1] + (mouse.x * 0.2), 0.05);
   });
 
   return (
-    <Icosahedron ref={ref} args={[1, 0]} position={position} rotation={rotation} scale={scale}>
-      <meshStandardMaterial color="#ffffff" wireframe transparent opacity={0.2} />
-    </Icosahedron>
-  );
-}
-
-function MorphingBlob() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const [hovered, setHovered] = useState(false);
-  const { mouse } = useThree();
-
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    
-    const time = state.clock.getElapsedTime();
-    
-    const targetX = mouse.x * 2;
-    const targetY = mouse.y * 2;
-    
-    meshRef.current.position.x = THREE.MathUtils.lerp(meshRef.current.position.x, targetX, 0.05);
-    meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, targetY, 0.05);
-    
-    meshRef.current.rotation.x = Math.cos(time / 4) * 0.3;
-    meshRef.current.rotation.y = Math.sin(time / 2) * 0.3;
-    meshRef.current.rotation.z += 0.005;
-  });
-
-  return (
-    <Float speed={5} rotationIntensity={0.2} floatIntensity={1}>
-      <Sphere
-        ref={meshRef}
-        args={[1.6, 128, 128]}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
-      >
-        <MeshDistortMaterial
-          color={hovered ? "#ffffff" : "#0a0a0a"}
-          speed={hovered ? 6 : 3}
-          distort={0.6}
-          radius={1}
-          metalness={1}
-          roughness={0.05}
-          emissive="#000000"
-        />
-      </Sphere>
+    <Float
+      speed={1.5} 
+      rotationIntensity={0.2} 
+      floatIntensity={0.5}
+      floatingRange={[-0.1, 0.1]}
+    >
+      <group ref={group} position={position} rotation={rotation}>
+        <RoundedBox args={[2.5, 3.5, 0.12]} radius={0.15} smoothness={4} ref={mesh}>
+          <MeshTransmissionMaterial
+            backside
+            samples={8}
+            thickness={0.2}
+            chromaticAberration={0.05}
+            anisotropy={0.1}
+            distortion={0.1}
+            distortionScale={0.1}
+            temporalDistortion={0.1}
+            clearcoat={1}
+            clearcoatRoughness={0.1}
+            attenuationDistance={0.5}
+            attenuationColor="#ffffff"
+            color="#ffffff"
+            roughness={0}
+            transmission={1}
+            ior={1.2}
+          />
+        </RoundedBox>
+        
+        <Text
+          position={[0, 0, 0.07]}
+          fontSize={0.15}
+          color="white"
+          anchorX="center"
+          anchorY="middle"
+          font="https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoS8SByqN_S_1BvR_H5f8Q.woff"
+          maxWidth={2}
+          textAlign="center"
+          material-toneMapped={false}
+        >
+          {title.toUpperCase()}
+        </Text>
+      </group>
     </Float>
   );
 }
 
-function GridBackground() {
+function Scene() {
+  const cards = useMemo(() => {
+    return [
+      { position: [2, 1, -2], rotation: [0.2, -0.3, 0.1] },
+      { position: [4, -1, -3], rotation: [-0.1, -0.5, -0.2] },
+      { position: [1, -2, -4], rotation: [0.3, -0.2, 0.4] },
+      { position: [6, 2, -5], rotation: [-0.2, -0.6, 0.1] },
+      { position: [3, 3, -3.5], rotation: [0.1, -0.4, -0.1] },
+    ] as const;
+  }, []);
+
   return (
-    <group position={[0, 0, -5]}>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -8, 0]}>
-        <planeGeometry args={[100, 100, 100, 100]} />
-        <meshStandardMaterial 
-          color="#222222" 
-          wireframe 
-          transparent 
-          opacity={0.05} 
-        />
-      </mesh>
-    </group>
+    <>
+      <PerspectiveCamera makeDefault position={[0, 0, 8]} fov={50} />
+      <Environment preset="city" />
+      <ambientLight intensity={0.2} />
+      <pointLight position={[10, 10, 10]} intensity={1.5} color="#4444ff" />
+      <pointLight position={[-10, -10, -10]} intensity={1} color="#ff4444" />
+      <spotLight position={[0, 5, 10]} angle={0.15} penumbra={1} intensity={2} castShadow />
+      
+      <group position={[1, 0, 0]}>
+        {cards.map((card, i) => (
+          <Card 
+            key={i} 
+            index={i}
+            title={projectNames[i] || "Project"}
+            position={card.position as [number, number, number]} 
+            rotation={card.rotation as [number, number, number]} 
+          />
+        ))}
+      </group>
+  
+      <ContactShadows
+        position={[0, -5, 0]}
+        opacity={0.4}
+        scale={30}
+        blur={2.5}
+        far={10}
+        color="#000000"
+      />
+    </>
   );
-}
-
-function Rig() {
-  const { camera, mouse } = useThree();
-  const vec = new THREE.Vector3();
-
-  return useFrame(() => {
-    camera.position.lerp(vec.set(mouse.x * 1.5, mouse.y * 1.5, camera.position.z), 0.05);
-    camera.lookAt(0, 0, 0);
-  });
 }
 
 export function Interactive3D() {
   return (
-    <div className="w-full h-full relative">
-      <Canvas dpr={[1, 2]} shadows>
-        <PerspectiveCamera makeDefault position={[0, 0, 8]} fov={45} />
-        <ambientLight intensity={0.1} />
-        <spotLight 
-          position={[10, 10, 10]} 
-          angle={0.15} 
-          penumbra={1} 
-          intensity={2} 
-          castShadow 
-          color="#ffffff"
-        />
-        <pointLight position={[-10, -10, -10]} intensity={1} color="#444444" />
-        
-        <Suspense fallback={null}>
-          <MorphingBlob />
-          <Shards count={30} />
-          <GridBackground />
-          <Environment preset="night" />
-          <ContactShadows 
-            position={[0, -4, 0]} 
-            opacity={0.3} 
-            scale={20} 
-            blur={3} 
-            far={5} 
-          />
-        </Suspense>
-        
-        <Rig />
+    <div className="w-full h-full relative overflow-hidden bg-[#030303]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(20,20,50,0.1),transparent)]" />
+      <Canvas
+        dpr={[1, 2]}
+        gl={{ antialias: true, alpha: true, stencil: false, depth: true }}
+        className="w-full h-full"
+      >
+        <Scene />
       </Canvas>
     </div>
   );

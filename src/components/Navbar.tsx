@@ -18,14 +18,15 @@ export function Navbar() {
       className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
     >
           <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <Magnetic amount={0.2}>
-              <motion.a 
-                href="/" 
-                className="text-lg font-bold tracking-tighter"
-              >
-                NEXUS
-              </motion.a>
-            </Magnetic>
+              <Magnetic amount={0.2}>
+                <motion.a 
+                  href="/" 
+                  className="text-lg font-bold tracking-tighter"
+                >
+                  ADVAITH
+                </motion.a>
+              </Magnetic>
+
 
             <div className="hidden md:flex items-center gap-12">
               {navLinks.map((link) => (

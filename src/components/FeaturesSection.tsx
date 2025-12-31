@@ -30,7 +30,7 @@ export function FeaturesSection() {
   const containerRef = useRef(null);
 
   return (
-    <section ref={containerRef} className="relative py-64 px-6 md:px-24 bg-[#050505] overflow-hidden">
+    <section ref={containerRef} className="relative py-64 px-6 md:px-24 bg-transparent overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col gap-32">
           <div className="flex flex-col md:flex-row justify-between items-start gap-12 border-b border-white/10 pb-12">

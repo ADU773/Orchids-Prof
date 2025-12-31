@@ -58,9 +58,10 @@ export function CTASection() {
 
   const opacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
-  return (
-    <section ref={containerRef} className="relative py-32 px-6 bg-[#030303] overflow-hidden min-h-screen flex items-center">
-      <AnimatedBackground />
+    return (
+      <section ref={containerRef} className="relative py-32 px-6 bg-transparent overflow-hidden min-h-screen flex items-center">
+        <AnimatedBackground />
+
 
       <motion.div 
         ref={ref} 
@@ -87,9 +88,10 @@ export function CTASection() {
             Enter the
           </span>
           <br />
-          <span className="bg-gradient-to-r from-[#bc13fe] via-[#00f3ff] to-white bg-clip-text text-transparent">
-            NEXUS
-          </span>
+            <span className="bg-gradient-to-r from-[#bc13fe] via-[#00f3ff] to-white bg-clip-text text-transparent">
+              ADVAITH
+            </span>
+
         </motion.h2>
 
         <motion.p
