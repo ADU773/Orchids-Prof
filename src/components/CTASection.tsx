@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const avatarColors = [
   ["#00f3ff", "#0066ff"],
@@ -50,6 +50,7 @@ export function CTASection() {
   const ref = useRef(null);
   const containerRef = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [showDemoModal, setShowDemoModal] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -58,111 +59,179 @@ export function CTASection() {
 
   const opacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
+  const scrollToContact = () => {
+    const element = document.getElementById("contact");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
     return (
-      <section ref={containerRef} className="relative py-32 px-6 bg-transparent overflow-hidden min-h-screen flex items-center">
-        <AnimatedBackground />
+      <>
+        <section ref={containerRef} className="relative py-32 px-6 bg-transparent overflow-hidden min-h-screen flex items-center">
+          <AnimatedBackground />
 
-
-      <motion.div 
-        ref={ref} 
-        className="relative z-10 max-w-4xl mx-auto text-center"
-        style={{ opacity }}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+        <motion.div 
+          ref={ref} 
+          className="relative z-10 max-w-4xl mx-auto text-center"
+          style={{ opacity }}
         >
-          <span className="inline-block px-4 py-2 mb-8 text-xs font-medium tracking-[0.3em] uppercase text-[#00f3ff] glass rounded-full">
-            Ready to Begin?
-          </span>
-        </motion.div>
-
-        <motion.h2
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8"
-        >
-          <span className="bg-gradient-to-r from-white via-[#00f3ff] to-[#bc13fe] bg-clip-text text-transparent">
-            Enter the
-          </span>
-          <br />
-            <span className="bg-gradient-to-r from-[#bc13fe] via-[#00f3ff] to-white bg-clip-text text-transparent">
-              ADVAITH
-            </span>
-
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="max-w-xl mx-auto text-lg md:text-xl text-white/50 mb-12"
-        >
-          Join thousands of creators who have already stepped into the future of digital design.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="flex flex-col sm:flex-row gap-6 justify-center items-center"
-        >
-          <motion.button
-            className="group relative px-10 py-5 rounded-full overflow-hidden"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-[#00f3ff] to-[#bc13fe]" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#bc13fe] to-[#00f3ff] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <span className="relative z-10 flex items-center gap-3 text-black font-semibold text-lg">
-              <span>Get Started Free</span>
-              <motion.svg 
-                className="w-5 h-5" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </motion.svg>
+            <span className="inline-block px-4 py-2 mb-8 text-xs font-medium tracking-[0.3em] uppercase text-[#00f3ff] glass rounded-full">
+              Ready to Begin?
             </span>
-          </motion.button>
+          </motion.div>
 
-          <motion.button
-            className="px-10 py-5 rounded-full border border-white/20 text-white/80 hover:bg-white/5 hover:border-white/40 transition-all duration-300 text-lg"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <motion.h2
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8"
           >
-            Watch Demo
-          </motion.button>
-        </motion.div>
+            <span className="bg-gradient-to-r from-white via-[#00f3ff] to-[#bc13fe] bg-clip-text text-transparent">
+              Enter the
+            </span>
+            <br />
+              <span className="bg-gradient-to-r from-[#bc13fe] via-[#00f3ff] to-white bg-clip-text text-transparent">
+                ADVAITH
+              </span>
 
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="max-w-xl mx-auto text-lg md:text-xl text-white/50 mb-12"
+          >
+            Join thousands of creators who have already stepped into the future of digital design.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+          >
+            <motion.button
+              onClick={scrollToContact}
+              className="group relative px-10 py-5 rounded-full overflow-hidden"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-[#00f3ff] to-[#bc13fe]" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#bc13fe] to-[#00f3ff] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="relative z-10 flex items-center gap-3 text-black font-semibold text-lg">
+                <span>Get Started Free</span>
+                <motion.svg 
+                  className="w-5 h-5" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </motion.svg>
+              </span>
+            </motion.button>
+
+            <motion.button
+              onClick={() => setShowDemoModal(true)}
+              className="px-10 py-5 rounded-full border border-white/20 text-white/80 hover:bg-white/5 hover:border-white/40 transition-all duration-300 text-lg"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Watch Demo
+            </motion.button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="mt-16 flex items-center justify-center gap-8"
+          >
+            <div className="flex -space-x-3">
+              {avatarColors.map((colors, i) => (
+                <div
+                  key={i}
+                  className="w-10 h-10 rounded-full border-2 border-[#030303] overflow-hidden"
+                  style={{
+                    background: `linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%)`,
+                  }}
+                />
+              ))}
+            </div>
+            <div className="text-left">
+              <p className="text-white font-semibold">10,000+</p>
+              <p className="text-white/40 text-sm">Creators joined</p>
+            </div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {showDemoModal && (
         <motion.div
           initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="mt-16 flex items-center justify-center gap-8"
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          onClick={() => setShowDemoModal(false)}
         >
-          <div className="flex -space-x-3">
-            {avatarColors.map((colors, i) => (
-              <div
-                key={i}
-                className="w-10 h-10 rounded-full border-2 border-[#030303] overflow-hidden"
-                style={{
-                  background: `linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%)`,
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            className="relative w-full max-w-4xl bg-black/90 border border-white/10 rounded-2xl p-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowDemoModal(false)}
+              className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-[#00f3ff] to-[#bc13fe] bg-clip-text text-transparent">
+              Demo Reel
+            </h3>
+            
+            <div className="aspect-video bg-gradient-to-br from-gray-900 to-black rounded-xl flex items-center justify-center border border-white/10">
+              <div className="text-center">
+                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r from-[#00f3ff] to-[#bc13fe] flex items-center justify-center">
+                  <svg className="w-8 h-8 text-black ml-1" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+                <p className="text-white/60 text-sm">Demo video coming soon</p>
+                <p className="text-white/40 text-xs mt-2">Explore the projects in the meantime</p>
+              </div>
+            </div>
+            
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={() => {
+                  setShowDemoModal(false);
+                  const element = document.getElementById("work");
+                  if (element) {
+                    element.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }
                 }}
-              />
-            ))}
-          </div>
-          <div className="text-left">
-            <p className="text-white font-semibold">10,000+</p>
-            <p className="text-white/40 text-sm">Creators joined</p>
-          </div>
+                className="px-6 py-3 bg-gradient-to-r from-[#00f3ff] to-[#bc13fe] text-black font-medium rounded-full hover:opacity-90 transition-opacity"
+              >
+                View Projects
+              </button>
+            </div>
+          </motion.div>
         </motion.div>
-      </motion.div>
-    </section>
+      )}
+    </>
   );
 }

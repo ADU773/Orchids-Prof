@@ -10,14 +10,14 @@ import {
   RoundedBox,
   useCursor,
   ContactShadows,
-  MeshTransmissionMaterial
 } from "@react-three/drei";
 import * as THREE from "three";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const PROJECTS = [
   { 
-    id: "01", 
+    id: "smart-parking", 
     title: "Smart Parking", 
     rank: "Q", 
     suit: "♠", 
@@ -26,7 +26,7 @@ const PROJECTS = [
     description: "Intelligent urban infrastructure."
   },
   { 
-    id: "02", 
+    id: "fromflow", 
     title: "FromFlow", 
     rank: "A", 
     suit: "♠", 
@@ -35,7 +35,7 @@ const PROJECTS = [
     description: "Seamless workflow automation."
   },
   { 
-    id: "03", 
+    id: "activity-tracker", 
     title: "Activity Tracker", 
     rank: "Q", 
     suit: "♥", 
@@ -44,7 +44,7 @@ const PROJECTS = [
     description: "Quantified self aesthetics."
   },
   { 
-    id: "04", 
+    id: "malayalam-fml", 
     title: "Malayalam FML", 
     rank: "A", 
     suit: "♥", 
@@ -54,11 +54,12 @@ const PROJECTS = [
   },
 ];
 
-function ProjectCard({ position, rotation, index, project }: {
+function ProjectCard({ position, rotation, index, project, onCardClick }: {
   position: [number, number, number];
   rotation: [number, number, number];
   index: number;
   project: typeof PROJECTS[0];
+  onCardClick: (id: string) => void;
 }) {
   const group = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
@@ -68,7 +69,7 @@ function ProjectCard({ position, rotation, index, project }: {
 
   const accentColor = project.isRed ? "#ff0000" : "#000000";
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!group.current) return;
     
     const targetX = (mouse.x * viewport.width) / 12;
@@ -92,6 +93,7 @@ function ProjectCard({ position, rotation, index, project }: {
         rotation={rotation}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
+        onClick={() => onCardClick(project.id)}
       >
         <RoundedBox args={[2.8, 4.2, 0.1]} radius={0.12} smoothness={4}>
           <meshStandardMaterial 
@@ -109,7 +111,6 @@ function ProjectCard({ position, rotation, index, project }: {
         )}
 
         <group position={[0, 0, 0.06]}>
-          {/* Rank & Suit Corners */}
           {[1, -1].map((side) => (
             <group key={side} position={[side * 1.1, side * 1.8, 0]} rotation={[0, 0, side === -1 ? Math.PI : 0]}>
               <Text 
@@ -132,7 +133,6 @@ function ProjectCard({ position, rotation, index, project }: {
             </group>
           ))}
 
-          {/* Project Content */}
           <group position={[0, 0.2, 0]}>
             <Text 
               fontSize={0.12} 
@@ -141,7 +141,7 @@ function ProjectCard({ position, rotation, index, project }: {
               textAlign="center" 
               anchorY="middle"
               letterSpacing={0.1}
-              opacity={0.4}
+              fillOpacity={0.4}
             >
               {project.topic}
             </Text>
@@ -158,26 +158,23 @@ function ProjectCard({ position, rotation, index, project }: {
             </Text>
           </group>
 
-          {/* Abstract Illustration (Geometric Oni Mask Vibe) */}
           <mesh position={[0, 1.2, 0]} scale={0.5}>
             <octahedronGeometry />
             <meshStandardMaterial color={accentColor} wireframe />
           </mesh>
 
-          {/* Footer Label */}
           <Text 
             position={[0, -1.7, 0]} 
             fontSize={0.08} 
             color={accentColor} 
             letterSpacing={0.5}
-            opacity={0.3}
+            fillOpacity={0.3}
             anchorX="center"
           >
-            EST. 2024 / {project.id}
+            CLICK TO VIEW
           </Text>
         </group>
 
-        {/* Rim Light */}
         <mesh position={[0, 0, 0]} scale={[1.02, 1.02, 1.02]}>
           <RoundedBox args={[2.8, 4.2, 0.1]} radius={0.12} smoothness={4}>
             <meshBasicMaterial color="#ff0000" wireframe transparent opacity={0.1} />
@@ -188,7 +185,7 @@ function ProjectCard({ position, rotation, index, project }: {
   );
 }
 
-function Scene() {
+function Scene({ onCardClick }: { onCardClick: (id: string) => void }) {
   const { viewport } = useThree();
   const isMobile = viewport.width < 10;
   
@@ -225,6 +222,7 @@ function Scene() {
             project={item.project} 
             position={item.position as [number, number, number]} 
             rotation={item.rotation as [number, number, number]} 
+            onCardClick={onCardClick}
           />
         ))}
       </group>
@@ -242,9 +240,14 @@ function Scene() {
 }
 
 export function ShowcaseSection() {
+  const router = useRouter();
+
+  const handleCardClick = (id: string) => {
+    router.push(`/project/${id}`);
+  };
+
   return (
     <section className="relative min-h-screen bg-black py-24 flex flex-col items-center justify-center overflow-hidden">
-      {/* Background Atmosphere */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(20,0,0,0.4),transparent_70%)] opacity-50" />
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
@@ -278,18 +281,16 @@ export function ShowcaseSection() {
           className="text-white/30 text-[10px] max-w-xl mx-auto uppercase tracking-[0.4em] leading-relaxed"
         >
           Four pillars of creative exploration. <br />
-          Each a unique ritual in the void of design.
+          Click on any card to view project details.
         </motion.p>
       </div>
 
-      {/* 3D Scene */}
       <div className="relative z-10 w-full h-[60vh] md:h-[70vh]">
         <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 10], fov: 35 }}>
-          <Scene />
+          <Scene onCardClick={handleCardClick} />
         </Canvas>
       </div>
 
-      {/* Cinematic Overlays */}
       <div className="absolute inset-0 z-30 pointer-events-none opacity-[0.03] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
     </section>
   );

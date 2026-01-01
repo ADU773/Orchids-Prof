@@ -21,6 +21,13 @@ export function HeroSection() {
   const textScale = useTransform(springScroll, [0, 0.5], [1, 1.05]);
   const textOpacity = useTransform(springScroll, [0, 0.1], [1, 0.9]);
 
+  const scrollToWork = () => {
+    const element = document.getElementById("work");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <section 
       ref={containerRef} 
@@ -28,27 +35,14 @@ export function HeroSection() {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 3D Scene Layer (Behind the text) */}
       <motion.div 
-        className="absolute inset-0 z-0"
-        style={{ 
-          scale: sceneScale, 
-          opacity: sceneOpacity
-        }}
-      >
-        <GothicCards />
-      </motion.div>
-
-      {/* Typography Mask Layer (The focal point) */}
-      <motion.div 
-        className="absolute inset-0 z-10 pointer-events-none"
+        className="absolute inset-0 z-0 pointer-events-none"
         style={{ scale: textScale, opacity: textOpacity }}
       >
         <div className="relative w-full h-full flex items-center px-8 md:px-24">
           <svg className="w-full h-full absolute inset-0" preserveAspectRatio="xMidYMid slice">
             <defs>
               <mask id="heroTextMask">
-                {/* Everything white is visible, everything black is hidden */}
                 <rect width="100%" height="100%" fill="white" />
                 <text
                   x="5%"
@@ -62,7 +56,6 @@ export function HeroSection() {
                 </text>
               </mask>
             </defs>
-            {/* This black rect covers the whole screen except where the text is (the mask) */}
             <rect
               width="100%"
               height="100%"
@@ -70,18 +63,22 @@ export function HeroSection() {
               mask="url(#heroTextMask)"
             />
           </svg>
-          
-          {/* Subtle Grain over the mask */}
           <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
         </div>
       </motion.div>
 
-      {/* Red Accents & Atmospheric Lighting */}
+      <motion.div 
+        className="absolute inset-0 z-10"
+        style={{ 
+          scale: sceneScale, 
+          opacity: sceneOpacity
+        }}
+      >
+        <GothicCards />
+      </motion.div>
+
       <div className="absolute inset-0 z-5 pointer-events-none">
-        {/* Diagonal Gradient (Reference Inspiration) */}
         <div className="absolute inset-0 bg-gradient-to-br from-red-950/20 via-transparent to-black/40" />
-        
-        {/* Hover Glow */}
         <motion.div 
           animate={{ 
             opacity: isHovered ? 0.4 : 0.15,
@@ -90,7 +87,6 @@ export function HeroSection() {
         />
       </div>
 
-      {/* UI Elements (Foreground) */}
       <div className="relative z-20 w-full h-screen flex flex-col justify-between p-8 md:p-16 pointer-events-none">
         <div className="flex justify-between items-start">
           <motion.div
@@ -143,7 +139,10 @@ export function HeroSection() {
             className="pointer-events-auto"
           >
             <Magnetic>
-              <button className="group relative px-10 py-5 overflow-hidden border border-white/5 bg-white/[0.02] hover:border-red-600/40 transition-all duration-700 backdrop-blur-sm">
+              <button 
+                onClick={scrollToWork}
+                className="group relative px-10 py-5 overflow-hidden border border-white/5 bg-white/[0.02] hover:border-red-600/40 transition-all duration-700 backdrop-blur-sm"
+              >
                 <span className="relative z-10 text-[10px] font-black tracking-[0.5em] text-white uppercase group-hover:text-red-500 transition-colors duration-500">
                   Enter The Deck
                 </span>
@@ -157,11 +156,9 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Cinematic Overlays */}
       <div className="absolute inset-0 z-25 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,transparent_40%,black_100%)] opacity-60" />
       <div className="absolute inset-0 z-30 pointer-events-none opacity-[0.03] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
       
-      {/* Scroll Hint */}
       <motion.div 
         style={{ opacity: useTransform(springScroll, [0, 0.05], [1, 0]) }}
         className="absolute bottom-10 left-10 z-20 flex items-center gap-6"
